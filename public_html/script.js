@@ -52,6 +52,8 @@ play.addEventListener("click",function() {
                 play.click();  
                 videoCheck = true;
                 URL.value ="";
+                
+                
             } else {
                 errMessage("Enter a valid video URL");
             }
@@ -61,7 +63,10 @@ play.addEventListener("click",function() {
             if (URL.value !== "")
             {
                 listeURL[nbrURL] = URL.value;
+                ajoutPlaylist();
                 nbrURL++;
+                
+                
             } else {
                 errMessage("Enter a valid video URL");
             }
@@ -90,5 +95,50 @@ play.addEventListener("click",function() {
         }
     });
     
-
+function ajoutPlaylist()
+{
+    var parentDiv = document.getElementById("playlist").parentNode;
+    var newVideo = document.createElement("div"); 
+    newVideo.setAttribute("id","playlist"+nbrURL);
+   // newVideo.innerHTML = URL.value;
+    parentDiv.appendChild(newVideo,null);
+    
+    var text = document.createElement("span");
+    text.innerHTML =URL.value;
+    document.getElementById("playlist"+nbrURL).appendChild(text,null);
+    
+    var buttonRemove = document.createElement("button");
+        buttonRemove.innerHTML = "Remove";
+        buttonRemove.addEventListener("click", function(evt)
+        {
+            var target =evt.target;
+            if (target.tagName === "BUTTON")
+            {
+                var parentId = target.parentElement.id;
+                var div = document.getElementById(parentId);
+                document.getElementsByTagName("body")[0].removeChild(div);
+            }
+        });
+    document.getElementById("playlist"+nbrURL).appendChild(buttonRemove,null);
+    
+    var buttonUp = document.createElement("button");
+        buttonUp.innerHTML = "up";
+        buttonUp.addEventListener("click", function(evt)
+        {
+            var target =evt.target;
+            if (target.tagName === "BUTTON")
+            {
+                var parentId = target.parentElement.id;
+                var currentDiv = document.getElementById(parentId);
+                if(currentDiv.getAttribute("id")!=="playlist0")
+                {
+                    var previous = currentDiv.previousSibling.getAttribute("id");
+                    var temp = document.getElementById(previous).firstChild.innerHTML;
+                    document.getElementById(previous).firstChild.innerHTML = currentDiv.firstChild.innerHTML;
+                    currentDiv.firstChild.innerHTML = temp;
+                }
+            }
+        });
+        document.getElementById("playlist"+nbrURL).appendChild(buttonUp,null);            
+}
     
